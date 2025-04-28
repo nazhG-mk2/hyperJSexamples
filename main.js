@@ -1,5 +1,4 @@
 import './style.css'
-import hypercycle from "hypercyclejs"
 
 import { injected } from '@wagmi/connectors'
 
@@ -7,6 +6,8 @@ const sepoliaBaseRPC = import.meta.env.VITE_RPC_BASE_SEPOLIA;
 const baseRPC = import.meta.env.VITE_RPC_BASE;
 const mainnetRPC = import.meta.env.VITE_RPC_MAINNET;
 const sepoliaRPC = import.meta.env.VITE_RPC_SEPOLIA;
+
+const hypercycle = MyLibrary.default
 
 const startConfig = () =>
   hypercycle.setAvailableRPCs({
