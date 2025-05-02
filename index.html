@@ -9,7 +9,17 @@
   <body>
     <div id="app">
       <button id="connectBtn">Conectar Wallet</button> 
-      <button id="payBtn">Pay</button> 
+      <button id="payBtn">Add Balance</button>
+      <div>
+        <h2>Balance</h2>
+        <p id="balance">0</p>
+        <button id="balanceBtn">Get Balance</button>
+      </div>
+      <div>
+        <h2>Cost Tester</h2>
+        <pre id="costResult"></pre>
+        <button id="costBtn">Get Cost</button>
+      </div>
     </div>
     <script src="https://unpkg.com/hypercyclejs/dist/index.umd.js"></script>
     <script type="module" src="/main.js"></script>

@@ -7,6 +7,8 @@ const baseRPC = import.meta.env.VITE_RPC_BASE;
 const mainnetRPC = import.meta.env.VITE_RPC_MAINNET;
 const sepoliaRPC = import.meta.env.VITE_RPC_SEPOLIA;
 
+const nodeUrl = import.meta.env.VITE_NODE_URL;
+const aimSlot = import.meta.env.VITE_AIM_SLOT;
 const hypercycle = MyLibrary.default
 
 const startConfig = () =>
@@ -22,7 +24,6 @@ startConfig()
 const config = hypercycle.wagmiConfig()
 
 let userAddress = null
-const nodeUrl = "http://localhost:8000/"
 
 async function connectWallet() {
   const result = await hypercycle.coreConnect(config, { connector: injected() })
@@ -42,9 +43,44 @@ const getNodeAddress = async () => {
   return address
 }
 
-const nodeAddress = await getNodeAddress()
+// balanceBtn
+const getBalance = async () => {
+  try {
+    const balance = await hypercycle.getNodeBalance(
+      nodeUrl,
+      userAddress
+    );
+    document.getElementById('balance').innerText = `Balance: ${balance[userAddress]['HyPC']} USDC`
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// costBtn
+const getCost = async () => {
+  try {
+    const resp = await hypercycle.aimFetch(
+      userAddress,
+      nodeUrl,
+      aimSlot,
+      "POST",
+      `/cost`,
+      { "cost_only": "1" },
+      '{"costs": [{"currency": "HyPC", "estimated_cost": 1}]}',
+      {},
+      "ethereum"
+    );
+    const cost = await resp.json()
+    console.log({ cost });
+    document.getElementById('costResult').innerText = `Cost: ${JSON.stringify(cost)}`
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const pay = async () => {
+  const nodeAddress = await getNodeAddress()
   try {
     const pay = await hypercycle.nodeDeposit(
       nodeUrl,
@@ -61,5 +97,7 @@ const pay = async () => {
   }
 };
 
+document.getElementById('costBtn').onclick = getCost
 document.getElementById('payBtn').onclick = pay
 document.getElementById('connectBtn').onclick = connectWallet
+document.getElementById('balanceBtn').onclick = getBalance
